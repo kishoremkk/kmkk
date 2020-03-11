@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Products</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var i=1;
+			$('#add').click(function(){
+					i++;
+					console.log(i)  ;
+				$( "#list-row" ).append( '<div id="section_'+i+'"><div class="col-md-3"><input type="text" name="name[]"  id="name_'+i+'" placeholder="Enter the product name" style="width:100%;height: 30px;"></div><div class="col-md-2" ><input type="text" name="price[]" id="price_'+i+'" class="price" placeholder="Enter the product price" style="width:100%;height: 30px;"></div><div class="col-md-2"><select id="select_'+i+'" style="width:100%;height: 30px;" class="select"><option>select</option><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option></select></div><div class="col-md-2"> <input type="text" name="total[]" id="tot_'+i+'"var class="total" readonly style="width:100%;height: 30px;"></div><div class="col-md-2"><input type="text" name="tax[]" id="tax_'+i+'"var class="tax" readonly style="width:100%;height: 30px;"></div><div class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></div></div>');
+			});
+			$(document).on('click', '.btn_remove', function(){  
+	        	var button_id = $(this).attr("id"); 
+	        	console.log(button_id)  ;
+	       		$('#section_'+button_id+'').remove();  
+	       		console.log($('#list-row').find('select').trigger('click'));
+      		});  
+      		var num1=0;
+      		var num2=0;
+      		var num=0;
+      		/*$(document).on('blur','.price',function(){
+      			 var field_id = $(this).attr("id"); 
+      			num1 = $(field_id).val();
+      			console.log(num1,field_id);
+      		})*/
+      		$('#list-row').on('blur','.price',function(){ 
+      			var field_id = $(this).attr("id");
+      			
+      			num1 = parseInt($('#'+field_id).val());
+      			
+      		});
+      		$('#list-row').on('click','select', function () {
+	      		var field_id = $(this).attr("id");
+	      		var split = field_id.split('_');
+			    var optionSelected = $("option", this);
+			    num2 = parseInt(this.value);
+			    if((num1>0)&&(num2>0)){
+			    num =num1*num2;}
+			    if(num>0){
+			    $('#tot_'+split[1]).val(num);}
+			    var tax_am = (num * 0.18);
+			    $('#tax_'+split[1]).val(tax_am);
+			    var sum1 = 0;
+			    $('.total').each(function(i,v) {
+			        sum1 += Number($(this).val());
+			        if(sum1>0){
+			        $('.alltot').val(sum1);}
+			    });
+			     var sum2 = 0;
+			    $('.tax').each(function(i,v) {
+			        sum2 += Number($(this).val());
+			        if(sum2>0){
+			        $('.alltax').val(parseFloat(sum2));}
+			    }); 
+			    var sum = sum1 + sum2;
+			    if(sum>0){
+			    $('.grandtot').val(parseFloat(sum))}
+			});
+
+      		
+		});
+	</script>
+	<style type="text/css">
+		.heading,.text{
+			text-align: center;
+		}
+		
+		.alltotal{
+			padding-top:20px;
+		}
+		.prod{
+			padding:20px 0px;
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body>
+	<div id="overall">
+		<div class="container">
+			<div class="row">
+				<div class="prod">
+					<div class="col-md-3 text"><h4>Inventory List</h4></div>
+					<div class="col-md-2 text"><h4>Price</h4></div>
+					<div class="col-md-2 text"><h4>Quantity</h4></div>
+					<div class="col-md-2 text"><h4>Total Cost</h4></div>
+					<div class="col-md-2 text"><h4>Total Cost</h4></div>
+					<div class="col-md-1"></div>
+				</div>
+				<div class="list">
+					<form action="" id="form">
+						<div id="list-row">
+							<div id="section">
+								<div class="col-md-3" >
+									<input type="text" name="name[]"  id="name_1" placeholder="Enter the product name" style="width:100%;height: 30px;" required>
+								</div>
+								<div class="col-md-2">
+									<input type="text" name="price[]" id="price_1"  class="price" placeholder="Enter the product price" style="width:100%;height: 30px;" required>
+								</div>
+								<div class="col-md-2">
+									<select id="select_1" style="width:100%;height: 30px;" required class="select">
+										<option value="0" class="qty">select</option>
+										<option value="1" class="qty">1</option>
+										<option value="2" class="qty">2</option>
+										<option value="3" class="qty">3</option>
+										<option value="4" class="qty">4</option>
+										<option value="5" class="qty">5</option>
+									</select>
+								</div>
+								<div class="col-md-2">
+									<input type="text" name="total[]" class="total" id="tot_1" readonly style="width:100%;height: 30px;">
+								</div>
+								<div class="col-md-2">
+									<input type="text" name="tax[]" class="tax" id="tax_1" readonly style="width:100%;height: 30px;">
+								</div>
+								<div class="col-md-1">
+									<button  type="button" name="add" id="add" class="btn btn-success">Add</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12" style="padding:20px 0px;">
+							<div class="col-md-7 heading"><h4>TOTAL</h4></div>
+							<div class="col-md-2" >
+								<input type="text" name="alltot[]" class="alltot" id="all_tot" readonly style="width:100%;height: 30px;">
+							</div>
+							<div class="col-md-2"> 
+								<input type="text" name="alltax[]" class="alltax" id="all_tax" readonly style="width:100%;height: 30px;">
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+						<div class="col-md-12" style="padding:20px 0px;">
+							<div class="col-md-7 heading"><h4>GRAND TOTAL</h4></div>
+							<div class="col-md-4" >
+								<input type="text" name="grandtot[]" class="grandtot" id="grand_tot" readonly style="width:100%;height: 30px;">
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
